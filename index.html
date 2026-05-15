@@ -28,7 +28,7 @@
       color: var(--text);
     }
 
-    /* CSS NOTIFIKASI BARU */
+    /* CSS NOTIFIKASI */
     #notification-box {
       position: fixed;
       top: -100px;
@@ -135,7 +135,7 @@
       box-shadow: 0 12px 25px rgba(0, 141, 138, 0.35);
     }
 
-    /* Loading */
+    /* Loading Screen */
     #loading {
       position: fixed; inset: 0; background: white;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -195,12 +195,13 @@
     </div>
   </div>
 
+  <!-- LOADING SCREEN -->
   <div id="loading">
     <div>Menghubungkan Database...</div>
     <div class="spinner"></div>
   </div>
 
-  <img src="https://iili.io/fzd1Ma2.png" alt="Logo SMPN 13 Kendari" class="logo">
+  <img src="https://iili.io/fzd1Ma2.png" alt="Logo" class="logo">
 
   <div class="main-title">Asesmen Akhir Berbasis Digital</div>
   <div class="year-title">Tahun Pelajaran 2025/2026</div>
@@ -219,16 +220,16 @@
     S-Code by : ICT SMPN 13 - with Baso Asril
   </div>
 
+  <!-- MODAL ERROR -->
   <div id="errorModal" class="modal">
     <div class="modal-content">
       <h2 id="modalTitle">Token salah</h2>
-      <p id="modalMsg">Token yang Anda masukkan tidak valid atau sudah kadaluarsa silahkan hubungi panitia</p>
+      <p id="modalMsg">Token tidak valid atau kadaluarsa.</p>
       <button class="close-btn" onclick="close_modal()">TUTUP</button>
     </div>
   </div>
 
   <script>
-    // URL API dari Google Apps Script
     const API_URL = 'https://script.google.com/macros/s/AKfycbwr2ImoBNG0nvkhkCx04nWJ6LFgkSVxS2vLaSffIJqZ0gNBtP9ua6MZVj_LFp5dm3WxTA/exec';
     const API_LOG_URL = 'https://script.google.com/macros/s/AKfycby7kuopc4d7sQ2ABBymNRJDwZa0m1DzWc32SR1e9uqxmhWRietmD4YuTKBwkRaSBuyo/exec';
     const API_MESSAGE_URL = 'https://script.google.com/macros/s/AKfycbxAaHgj4zyEw7fwsdyFOtjc_RyXcTL9-iXh5oFY6qLtoT30mgi8q3WJgOPkfWTbKDId/exec';
@@ -236,7 +237,7 @@
     let daftarKode = {};
     let lastMessage = "";
 
-    // --- FITUR TERIMA PESAN (BARU) ---
+    // CEK PESAN BARU
     async function checkNewMessage() {
       try {
         const response = await fetch(`${API_MESSAGE_URL}?action=get&t=${new Date().getTime()}`);
@@ -247,35 +248,28 @@
           lastMessage = data.message;
         }
       } catch (e) {
-        console.log("Gagal mengambil pesan.");
+        console.log("Koneksi pesan tertunda...");
       }
     }
 
     function showNotification(msg) {
       const box = document.getElementById('notification-box');
       const text = document.getElementById('notif-message');
-      
       text.innerText = msg;
       box.classList.add('show');
-
-      setTimeout(() => {
-        box.classList.remove('show');
-      }, 10000);
+      setTimeout(() => { box.classList.remove('show'); }, 10000);
     }
 
     setInterval(checkNewMessage, 10000);
 
-    // --- LOGIKA ASLI ---
+    // LOAD DATABASE
     async function loadDaftarKode() {
       try {
         const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
-        if (!response.ok) throw new Error('Database tidak merespon');
-        
+        if (!response.ok) throw new Error('Database Offline');
         daftarKode = await response.json();
-        console.log("Database berhasil dimuat.");
       } catch (err) {
         console.error(err);
-        showError("Koneksi Gagal", "Sedang perbaikan");
       } finally {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('kodeInput').focus();
@@ -283,25 +277,20 @@
       }
     }
 
+    // LOG KEHADIRAN
     async function kirimDataLog(tokenTerpakai) {
       try {
-        let realIp = "Tidak terdeteksi";
+        let realIp = "Hidden";
         try {
           const ipRes = await fetch('https://api.ipify.org?format=json');
           const ipData = await ipRes.json();
           realIp = ipData.ip;
-        } catch (e) { console.log("Gagal deteksi IP"); }
-
-        let deviceModel = navigator.platform;
-        if (navigator.userAgentData) {
-          const highEntropy = await navigator.userAgentData.getHighEntropyValues(["model", "platform", "platformVersion"]);
-          deviceModel = (highEntropy.platform + " " + (highEntropy.model || "")).trim();
-        }
+        } catch (e) {}
 
         const infoData = {
           sesi: tokenTerpakai,
-          device: deviceModel,
-          browser: navigator.userAgent.split(') ')[1] || "Mobile Browser",
+          device: navigator.platform,
+          browser: navigator.userAgent.split(') ')[1] || "Browser",
           ip: realIp,
           userAgent: navigator.userAgent
         };
@@ -312,36 +301,24 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(infoData)
         });
-      } catch (e) {
-        console.warn("Log gagal.");
-      }
+      } catch (e) {}
     }
 
+    // VERIFIKASI
     async function verifikasiKode() {
       const input = document.getElementById('kodeInput').value.trim().toUpperCase();
-
       if (!input) {
-        showError("Input Kosong", "Harap masukkan token soal terlebih dahulu.");
-        return;
-      }
-
-      if (Object.keys(daftarKode).length === 0) {
-        showError("Database Error", "Data token belum siap. Silahkan refresh halaman.");
+        showError("Input Kosong", "Harap masukkan token soal.");
         return;
       }
 
       const targetUrl = daftarKode[input];
-
       if (targetUrl) {
         await kirimDataLog(input);
-        document.body.style.transition = 'opacity 0.5s ease';
         document.body.style.opacity = '0';
-        
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 500);
+        setTimeout(() => { window.location.href = targetUrl; }, 500);
       } else {
-        showError("Token Salah", "Token yang Anda masukkan tidak terdaftar.");
+        showError("Token Salah", "Token tidak terdaftar. Halaman akan dimuat ulang.");
       }
     }
 
@@ -351,18 +328,14 @@
       document.getElementById('errorModal').style.display = 'flex';
     }
 
-    // FUNGSI UPDATE: Menutup modal dan me-refresh halaman
+    // REFRESH SAAT TOKEN SALAH
     function close_modal() {
       document.getElementById('errorModal').style.display = 'none';
-      window.location.reload(); // <--- Menambahkan refresh halaman otomatis
+      window.location.reload(); 
     }
 
     document.getElementById('kodeInput').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') verifikasiKode();
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target.className === 'modal') close_modal();
     });
 
     loadDaftarKode();
