@@ -1,344 +1,386 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sumatif Akhir Semester Ganjil</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Sumatif Akhir Semester Ganjil</title>
 
-  <style>
-    :root {
-      --primary: #1e40af;
-      --primary-light: #3b82f6;
-      --text: #1e293b;
-      --green: #008e8a;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 50px 20px 20px;
-      color: var(--text);
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    /* CSS NOTIFIKASI */
-    #notification-box {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 400px;
-      background: #1e293b;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 10000;
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-left: 5px solid #3b82f6;
-    }
-    #notification-box.show { top: 20px; }
-    .notif-icon { font-size: 20px; color: #3b82f6; }
-    .notif-content { flex: 1; }
-    .notif-title { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.7; margin-bottom: 2px; }
-    .notif-text { font-size: 13px; font-weight: 500; line-height: 1.4; }
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --text: #1e293b;
+            --green: #008e8a;
+            --red: #ef4444;
+            --red-dark: #dc2626;
+        }
 
-    .logo {
-      width: 130px;
-      margin-bottom: 35px;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .main-title {
-      font-size: 18px;
-      font-weight: 300;
-      text-align: center;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 50px 20px 20px;
+            color: var(--text);
+        }
 
-    .year-title {
-      font-size: 18px;
-      font-weight: 300;
-      text-align: center;
-      line-height: 1.3;
-      margin-bottom: 40px;
-    }
+        /* --- NOTIFIKASI --- */
+        #notification-box {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: #1e293b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10000;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid var(--primary-light);
+        }
 
-    .input-group {
-      width: 90%;
-      max-width: 380px;
-      margin-bottom: 30px;
-    }
+        #notification-box.show {
+            top: 20px;
+        }
 
-    .input-token {
-      width: 100%;
-      padding: 15px 20px;
-      text-transform: uppercase;
-      font-size: 18px;
-      font-weight: 700;
-      text-align: center;
-      border: 2px solid #00b4ae;
-      border-radius: 25px;
-      outline: none;
-      transition: all 0.3s;
-    }
-    .input-token:focus {
-      border-color: #00b4ae;
-      box-shadow: 0 0 0 5px rgba(0, 180, 174, 0.2);
-    }
+        .notif-icon {
+            font-size: 20px;
+            color: var(--primary-light);
+        }
 
-    .info {
-      font-size: 15px;
-      color: #64748b;
-      text-align: center;
-      line-height: 1.6;
-      margin-bottom: 50px;
-    }
+        .notif-content {
+            flex: 1;
+        }
 
-    .foot {
-      font-size: 12px;
-      color: #64748b;
-      text-align: center;
-      line-height: 1.6;
-      margin-top: 20px;
-    }
+        .notif-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 2px;
+        }
 
-    .btn {
-      width: 70%;
-      max-width: 380px;
-      padding: 16px;
-      background: var(--green);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 40px;
-    }
+        .notif-text {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
 
-    .btn:hover {
-      background: #006d68;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(0, 141, 138, 0.35);
-    }
+        /* --- LOGO & TYPOGRAPHY --- */
+        .logo {
+            width: 130px;
+            margin-bottom: 35px;
+        }
 
-    /* Loading Screen */
-    #loading {
-      position: fixed; inset: 0; background: white;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 9999; font-size: 19px; font-weight: 600; color: var(--primary);
-    }
-    .spinner {
-      width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid var(--primary);
-      border-radius: 50%; animation: spin 1s linear infinite; margin-top: 20px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+        .main-title, .year-title {
+            font-size: 18px;
+            font-weight: 300;
+            text-align: center;
+            line-height: 1.3;
+        }
 
-    /* Modal Error */
-    .modal {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-      align-items: center; justify-content: center;
-      z-index: 9999;
-    }
-    .modal-content {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 340px; width: 90%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      border: 3px solid #ef4444;
-    }
-    .modal h2 {
-      color: #dc2626;
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-    .close-btn {
-      margin-top: 20px;
-      padding: 12px 34px;
-      background: #ef4444;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .close-btn:hover { background: #dc2626; }
-  </style>
+        .main-title { margin-bottom: 8px; }
+        .year-title { margin-bottom: 40px; }
+
+        /* --- INPUT & BUTTON --- */
+        .input-group {
+            width: 90%;
+            max-width: 380px;
+            margin-bottom: 30px;
+        }
+
+        .input-token {
+            width: 100%;
+            padding: 15px 20px;
+            text-transform: uppercase;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            border: 2px solid #00b4ae;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-token:focus {
+            box-shadow: 0 0 0 5px rgba(0, 180, 174, 0.2);
+        }
+
+        .info {
+            font-size: 15px;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+
+        .btn {
+            width: 70%;
+            max-width: 380px;
+            padding: 16px;
+            background: var(--green);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 40px;
+        }
+
+        .btn:hover {
+            background: #006d68;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 141, 138, 0.35);
+        }
+
+        .foot {
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e2e8f0;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- MODAL ERROR --- */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 340px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 3px solid var(--red);
+        }
+
+        .modal h2 {
+            color: var(--red-dark);
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            padding: 12px 34px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-btn:hover { background: var(--red-dark); }
+    </style>
 </head>
 <body>
 
-  <!-- ELEMENT NOTIFIKASI -->
-  <div id="notification-box">
-    <div class="notif-icon">📢</div>
-    <div class="notif-content">
-      <div class="notif-title">Pesan Panitia</div>
-      <div id="notif-message" class="notif-text">Menunggu informasi...</div>
+    <!-- NOTIFIKASI -->
+    <div id="notification-box">
+        <div class="notif-icon">📢</div>
+        <div class="notif-content">
+            <div class="notif-title">Pesan Panitia</div>
+            <div id="notif-message" class="notif-text">Menunggu informasi...</div>
+        </div>
     </div>
-  </div>
 
-  <!-- LOADING SCREEN -->
-  <div id="loading">
-    <div>Menghubungkan Database...</div>
-    <div class="spinner"></div>
-  </div>
-
-  <img src="https://iili.io/fzd1Ma2.png" alt="Logo" class="logo">
-
-  <div class="main-title">Asesmen Akhir Berbasis Digital</div>
-  <div class="year-title">Tahun Pelajaran 2025/2026</div>
-
-  <div class="input-group">
-    <input type="text" id="kodeInput" class="input-token" placeholder="INPUT TOKEN SOAL" autocomplete="off" maxlength="50">
-  </div>
-
-  <div class="info">
-    Silahkan input Token Soal sesuai arahan<br>dari Panitia/Pengawas
-  </div>
-
-  <button class="btn" onclick="verifikasiKode()">CEK TOKEN</button>
-
-  <div class="foot">
-    S-Code by : ICT SMPN 13 - with Baso Asril
-  </div>
-
-  <!-- MODAL ERROR -->
-  <div id="errorModal" class="modal">
-    <div class="modal-content">
-      <h2 id="modalTitle">Token salah</h2>
-      <p id="modalMsg">Token tidak valid atau kadaluarsa.</p>
-      <button class="close-btn" onclick="close_modal()">TUTUP</button>
+    <!-- LOADING -->
+    <div id="loading">
+        <div>Menghubungkan Database...</div>
+        <div class="spinner"></div>
     </div>
-  </div>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwr2ImoBNG0nvkhkCx04nWJ6LFgkSVxS2vLaSffIJqZ0gNBtP9ua6MZVj_LFp5dm3WxTA/exec';
-    const API_LOG_URL = 'https://script.google.com/macros/s/AKfycby7kuopc4d7sQ2ABBymNRJDwZa0m1DzWc32SR1e9uqxmhWRietmD4YuTKBwkRaSBuyo/exec';
-    const API_MESSAGE_URL = 'https://script.google.com/macros/s/AKfycbxAaHgj4zyEw7fwsdyFOtjc_RyXcTL9-iXh5oFY6qLtoT30mgi8q3WJgOPkfWTbKDId/exec';
+    <img src="https://iili.io/fzd1Ma2.png" alt="Logo SMPN 13 Kendari" class="logo">
 
-    let daftarKode = {};
-    let lastMessage = "";
+    <div class="main-title">Asesmen Akhir Berbasis Digital</div>
+    <div class="year-title">Tahun Pelajaran 2025/2026</div>
 
-    // CEK PESAN BARU
-    async function checkNewMessage() {
-      try {
-        const response = await fetch(`${API_MESSAGE_URL}?action=get&t=${new Date().getTime()}`);
-        const data = await response.json();
-        
-        if (data.message && data.message !== lastMessage) {
-          showNotification(data.message);
-          lastMessage = data.message;
+    <div class="input-group">
+        <input type="text" id="kodeInput" class="input-token" placeholder="INPUT TOKEN SOAL" autocomplete="off" maxlength="50">
+    </div>
+
+    <div class="info">
+        Silahkan input Token Soal sesuai arahan<br>dari Panitia/Pengawas
+    </div>
+
+    <button class="btn" onclick="verifikasiKode()">CEK TOKEN</button>
+
+    <div class="foot">
+        S-Code by : ICT SMPN 13 - with Baso Asril
+    </div>
+
+    <!-- MODAL ERROR -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Token salah</h2>
+            <p id="modalMsg">Token yang Anda masukkan tidak valid atau sudah kadaluarsa.</p>
+            <button class="close-btn" onclick="close_modal()">TUTUP</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwr2ImoBNG0nvkhkCx04nWJ6LFgkSVxS2vLaSffIJqZ0gNBtP9ua6MZVj_LFp5dm3WxTA/exec';
+        const API_LOG_URL = 'https://script.google.com/macros/s/AKfycby7kuopc4d7sQ2ABBymNRJDwZa0m1DzWc32SR1e9uqxmhWRietmD4YuTKBwkRaSBuyo/exec';
+        const API_MESSAGE_URL = 'https://script.google.com/macros/s/AKfycbxAaHgj4zyEw7fwsdyFOtjc_RyXcTL9-iXh5oFY6qLtoT30mgi8q3WJgOPkfWTbKDId/exec';
+
+        let daftarKode = {};
+        let lastMessage = "";
+
+        // --- FITUR PESAN ---
+        async function checkNewMessage() {
+            try {
+                const response = await fetch(`${API_MESSAGE_URL}?action=get&t=${new Date().getTime()}`);
+                const data = await response.json();
+                if (data.message && data.message !== lastMessage) {
+                    showNotification(data.message);
+                    lastMessage = data.message;
+                }
+            } catch (e) {
+                console.log("Gagal mengambil pesan.");
+            }
         }
-      } catch (e) {
-        console.log("Koneksi pesan tertunda...");
-      }
-    }
 
-    function showNotification(msg) {
-      const box = document.getElementById('notification-box');
-      const text = document.getElementById('notif-message');
-      text.innerText = msg;
-      box.classList.add('show');
-      setTimeout(() => { box.classList.remove('show'); }, 10000);
-    }
+        function showNotification(msg) {
+            const box = document.getElementById('notification-box');
+            const text = document.getElementById('notif-message');
+            text.innerText = msg;
+            box.classList.add('show');
+            setTimeout(() => { box.classList.remove('show'); }, 10000);
+        }
 
-    setInterval(checkNewMessage, 10000);
+        setInterval(checkNewMessage, 10000);
 
-    // LOAD DATABASE
-    async function loadDaftarKode() {
-      try {
-        const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
-        if (!response.ok) throw new Error('Database Offline');
-        daftarKode = await response.json();
-      } catch (err) {
-        console.error(err);
-      } finally {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('kodeInput').focus();
-        checkNewMessage();
-      }
-    }
+        // --- LOGIKA UTAMA ---
+        async function loadDaftarKode() {
+            try {
+                const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error('Database error');
+                daftarKode = await response.json();
+            } catch (err) {
+                showError("Koneksi Gagal", "Sedang perbaikan");
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('kodeInput').focus();
+                checkNewMessage();
+            }
+        }
 
-    // LOG KEHADIRAN
-    async function kirimDataLog(tokenTerpakai) {
-      try {
-        let realIp = "Hidden";
-        try {
-          const ipRes = await fetch('https://api.ipify.org?format=json');
-          const ipData = await ipRes.json();
-          realIp = ipData.ip;
-        } catch (e) {}
+        async function kirimDataLog(tokenTerpakai) {
+            try {
+                let realIp = "Hidden";
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+                    realIp = ipData.ip;
+                } catch (e) {}
 
-        const infoData = {
-          sesi: tokenTerpakai,
-          device: navigator.platform,
-          browser: navigator.userAgent.split(') ')[1] || "Browser",
-          ip: realIp,
-          userAgent: navigator.userAgent
-        };
+                const infoData = {
+                    sesi: tokenTerpakai,
+                    device: navigator.platform,
+                    ip: realIp,
+                    userAgent: navigator.userAgent
+                };
 
-        await fetch(API_LOG_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(infoData)
+                await fetch(API_LOG_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(infoData)
+                });
+            } catch (e) {}
+        }
+
+        async function verifikasiKode() {
+            const input = document.getElementById('kodeInput').value.trim().toUpperCase();
+            if (!input) {
+                showError("Input Kosong", "Harap masukkan token soal.");
+                return;
+            }
+
+            const targetUrl = daftarKode[input];
+            if (targetUrl) {
+                await kirimDataLog(input);
+                document.body.style.opacity = '0';
+                setTimeout(() => { window.location.href = targetUrl; }, 500);
+            } else {
+                showError("Token Salah", "Token tidak valid. Halaman akan dimuat ulang.");
+            }
+        }
+
+        function showError(title, msg) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMsg').innerText = msg;
+            document.getElementById('errorModal').style.display = 'flex';
+        }
+
+        // FUNGSI REFRESH SAAT TUTUP MODAL
+        function close_modal() {
+            document.getElementById('errorModal').style.display = 'none';
+            // Refresh halaman agar bisa mengambil token baru dari database
+            window.location.reload();
+        }
+
+        document.getElementById('kodeInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verifikasiKode();
         });
-      } catch (e) {}
-    }
 
-    // VERIFIKASI
-    async function verifikasiKode() {
-      const input = document.getElementById('kodeInput').value.trim().toUpperCase();
-      if (!input) {
-        showError("Input Kosong", "Harap masukkan token soal.");
-        return;
-      }
-
-      const targetUrl = daftarKode[input];
-      if (targetUrl) {
-        await kirimDataLog(input);
-        document.body.style.opacity = '0';
-        setTimeout(() => { window.location.href = targetUrl; }, 500);
-      } else {
-        showError("Token Salah", "Token tidak terdaftar. Halaman akan dimuat ulang.");
-      }
-    }
-
-    function showError(title, msg) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modalMsg').innerText = msg;
-      document.getElementById('errorModal').style.display = 'flex';
-    }
-
-    // REFRESH SAAT TOKEN SALAH
-    function close_modal() {
-      document.getElementById('errorModal').style.display = 'none';
-      window.location.reload(); 
-    }
-
-    document.getElementById('kodeInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') verifikasiKode();
-    });
-
-    loadDaftarKode();
-  </script>
+        loadDaftarKode();
+    </script>
 </body>
 </html>
