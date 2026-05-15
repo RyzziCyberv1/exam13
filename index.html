@@ -38,7 +38,7 @@
         /* --- NOTIFIKASI --- */
         #notification-box {
             position: fixed;
-            top: -100px;
+            top: -120px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
@@ -83,7 +83,7 @@
             line-height: 1.4;
         }
 
-        /* --- LOGO & TYPOGRAPHY --- */
+        /* --- LOGO & UI --- */
         .logo {
             width: 130px;
             margin-bottom: 35px;
@@ -99,7 +99,6 @@
         .main-title { margin-bottom: 8px; }
         .year-title { margin-bottom: 40px; }
 
-        /* --- INPUT & BUTTON --- */
         .input-group {
             width: 90%;
             max-width: 380px;
@@ -159,24 +158,18 @@
             margin-top: 20px;
         }
 
-        /* --- LOADING SCREEN --- */
+        /* --- LOADING --- */
         #loading {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             z-index: 9999;
-            font-size: 19px;
-            font-weight: 600;
-            color: var(--primary);
+            font-size: 19px; font-weight: 600; color: var(--primary);
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border: 5px solid #e2e8f0;
             border-top: 5px solid var(--primary);
             border-radius: 50%;
@@ -186,53 +179,31 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- MODAL ERROR --- */
+        /* --- MODAL --- */
         .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; z-index: 9999;
         }
 
         .modal-content {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 340px;
-            width: 90%;
+            background: white; padding: 40px 30px;
+            border-radius: 20px; text-align: center;
+            max-width: 340px; width: 90%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             border: 3px solid var(--red);
         }
 
-        .modal h2 {
-            color: var(--red-dark);
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
         .close-btn {
-            margin-top: 20px;
-            padding: 12px 34px;
-            background: var(--red);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
+            margin-top: 20px; padding: 12px 34px;
+            background: var(--red); color: white;
+            border: none; border-radius: 50px;
+            font-weight: 600; cursor: pointer;
         }
-
-        .close-btn:hover { background: var(--red-dark); }
     </style>
 </head>
 <body>
 
-    <!-- NOTIFIKASI -->
     <div id="notification-box">
         <div class="notif-icon">📢</div>
         <div class="notif-content">
@@ -241,19 +212,18 @@
         </div>
     </div>
 
-    <!-- LOADING -->
     <div id="loading">
         <div>Menghubungkan Database...</div>
         <div class="spinner"></div>
     </div>
 
-    <img src="https://iili.io/fzd1Ma2.png" alt="Logo SMPN 13 Kendari" class="logo">
+    <img src="https://iili.io/fzd1Ma2.png" alt="Logo" class="logo">
 
     <div class="main-title">Asesmen Akhir Berbasis Digital</div>
     <div class="year-title">Tahun Pelajaran 2025/2026</div>
 
     <div class="input-group">
-        <input type="text" id="kodeInput" class="input-token" placeholder="INPUT TOKEN SOAL" autocomplete="off" maxlength="50">
+        <input type="text" id="kodeInput" class="input-token" placeholder="INPUT TOKEN SOAL" autocomplete="off">
     </div>
 
     <div class="info">
@@ -266,34 +236,39 @@
         S-Code by : ICT SMPN 13 - with Baso Asril
     </div>
 
-    <!-- MODAL ERROR -->
     <div id="errorModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">Token salah</h2>
-            <p id="modalMsg">Token yang Anda masukkan tidak valid atau sudah kadaluarsa.</p>
+            <p id="modalMsg">Token tidak valid atau sudah kadaluarsa.</p>
             <button class="close-btn" onclick="close_modal()">TUTUP</button>
         </div>
     </div>
 
     <script>
+        // --- KONFIGURASI URL ---
         const API_URL = 'https://script.google.com/macros/s/AKfycbwr2ImoBNG0nvkhkCx04nWJ6LFgkSVxS2vLaSffIJqZ0gNBtP9ua6MZVj_LFp5dm3WxTA/exec';
         const API_LOG_URL = 'https://script.google.com/macros/s/AKfycby7kuopc4d7sQ2ABBymNRJDwZa0m1DzWc32SR1e9uqxmhWRietmD4YuTKBwkRaSBuyo/exec';
+        
+        // PASTIKAN LINK INI ADALAH HASIL NEW DEPLOYMENT TERBARU
         const API_MESSAGE_URL = 'https://script.google.com/macros/s/AKfycbxQRvFWBIOPpnOcb34pWtPAm8NzeUvwWRJrc3rzXS79ueOha-naSGEKiQQasNNBdMcqxg/exec';
 
         let daftarKode = {};
         let lastMessage = "";
 
-        // --- FITUR PESAN ---
+        // --- PERBAIKAN FITUR PESAN ---
         async function checkNewMessage() {
             try {
-                const response = await fetch(`${API_MESSAGE_URL}?action=get&t=${new Date().getTime()}`);
+                // Menghapus ?action=get agar kompatibel dengan script 'Anti-Gagal'
+                const response = await fetch(`${API_MESSAGE_URL}?t=${new Date().getTime()}`);
                 const data = await response.json();
-                if (data.message && data.message !== lastMessage) {
+                
+                // Cek apakah pesan valid dan berbeda dari sebelumnya
+                if (data.message && data.message.trim() !== "" && data.message !== lastMessage) {
                     showNotification(data.message);
                     lastMessage = data.message;
                 }
             } catch (e) {
-                console.log("Gagal mengambil pesan.");
+                console.log("Koneksi pesan sedang sibuk...");
             }
         }
 
@@ -302,48 +277,26 @@
             const text = document.getElementById('notif-message');
             text.innerText = msg;
             box.classList.add('show');
+            // Notifikasi muncul selama 10 detik lalu sembunyi
             setTimeout(() => { box.classList.remove('show'); }, 10000);
         }
 
+        // Jalankan pengecekan setiap 10 detik
         setInterval(checkNewMessage, 10000);
 
         // --- LOGIKA UTAMA ---
         async function loadDaftarKode() {
             try {
                 const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
-                if (!response.ok) throw new Error('Database error');
                 daftarKode = await response.json();
             } catch (err) {
-                showError("Koneksi Gagal", "Sedang perbaikan");
+                showError("Koneksi Gagal", "Gagal memuat database soal.");
             } finally {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('kodeInput').focus();
+                // Cek pesan saat pertama kali load
                 checkNewMessage();
             }
-        }
-
-        async function kirimDataLog(tokenTerpakai) {
-            try {
-                let realIp = "Hidden";
-                try {
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipRes.json();
-                    realIp = ipData.ip;
-                } catch (e) {}
-
-                const infoData = {
-                    sesi: tokenTerpakai,
-                    device: navigator.platform,
-                    ip: realIp,
-                    userAgent: navigator.userAgent
-                };
-
-                await fetch(API_LOG_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(infoData)
-                });
-            } catch (e) {}
         }
 
         async function verifikasiKode() {
@@ -355,11 +308,11 @@
 
             const targetUrl = daftarKode[input];
             if (targetUrl) {
-                await kirimDataLog(input);
-                document.body.style.opacity = '0';
-                setTimeout(() => { window.location.href = targetUrl; }, 500);
+                // Opsional: kirim log ke spreadsheet log
+                document.body.style.opacity = '0.5';
+                window.location.href = targetUrl;
             } else {
-                showError("Token Salah", "Token tidak valid. Halaman akan dimuat ulang.");
+                showError("Token Salah", "Token tidak valid atau sudah kadaluarsa.");
             }
         }
 
@@ -369,10 +322,8 @@
             document.getElementById('errorModal').style.display = 'flex';
         }
 
-        // FUNGSI REFRESH SAAT TUTUP MODAL
         function close_modal() {
             document.getElementById('errorModal').style.display = 'none';
-            // Refresh halaman agar bisa mengambil token baru dari database
             window.location.reload();
         }
 
